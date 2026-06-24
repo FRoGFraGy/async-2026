@@ -1,15 +1,15 @@
 from time import sleep, ctime, time
 import asyncio
-import threading
 
 async def update_cup_number(customer_name):
     print(f"{ctime()} | LCD: Processing for customer {customer_name}...")
     await asyncio.sleep(1)  # จำลองเวลาในการอัปเดตหมายเลขถ้วย
+    print(f"{ctime()} | LCD: Done for customer {customer_name}.")
 
 async def make_coffee(customer_name):
-    print(f"{ctime()} | Making coffee for customer {customer_name}...")
-    await asyncio.sleep(2)  # จำลองเวลาในการทำกาแฟ
-    print(f"{ctime()} | Coffee ready for customer {customer_name}!")
+    print(f"{ctime()} | Making coffee for {customer_name}...")
+    await asyncio.sleep(1)  # จำลองเวลาในการทำกาแฟ
+    print(f"{ctime()} | Coffee ready for {customer_name}!")
     await update_cup_number(customer_name)
 
 async def main():
