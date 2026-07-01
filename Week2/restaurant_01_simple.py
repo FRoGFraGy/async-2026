@@ -21,7 +21,7 @@ def mini_bar(customer):
     print(f"{ctime()} -> Mini Bar for Customer-{customer}...Done!")
 
 if __name__ == "__main__":  
-    customers = ["A", "B", "C", "D"]  # List of customers to serve
+    customers = ["A", "B", "C"]  # List of customers to serve
     start_time = time()
 
     for customer in customers:
