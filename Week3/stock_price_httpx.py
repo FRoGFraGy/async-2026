@@ -1,6 +1,6 @@
 # stock_price_httpx.py (เวอร์ชันสำหรับแจกเป็นโจทย์หรือแนวทางให้นักเรียนเขียน)
 import asyncio
-import httpx  
+import httpx
 from time import ctime
 
 async def fetch_stock_price(server_name: str):
@@ -22,7 +22,31 @@ async def main():
     TODO: จัดการส่งกลุ่ม Tasks ทำ Concurrency Racing บนเซิร์ฟเวอร์ย่อย Alpha, Beta, Gamma
     และปิดกั้นทรัพยากรตัวที่ค้างคา (pending) ทิ้งทันทีเมื่อมีผู้ชนะ
     """
+    tasks = [
+        asyncio.create_task(fetch_stock_price("Alpha"), name="Alpha"),
+        asyncio.create_task(fetch_stock_price("Beta"), name="Beta"),
+        asyncio.create_task(fetch_stock_price("Gamma"), name="Gamma"),
+    ]
+
+    print(f"{ctime()} Racing started...")
+
+    done, pending = await asyncio.wait(
+        tasks,
+        return_when=asyncio.FIRST_COMPLETED
+    )
+
+    winner = done.pop()
+
+    print(f"{ctime()} Winner: {winner.result()}")
+
+    print(f"{ctime()} Canceling {len(pending)} pending task(s)...")
+
+    for task in pending:
+        print(f"Cancel -> {task.get_name()}")
+        task.cancel()
+
+    await asyncio.gather(*pending, return_exceptions=True)
     
 
 if __name__ == "__main__":
-    
+    asyncio.run(main())
