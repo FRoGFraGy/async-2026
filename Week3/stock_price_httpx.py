@@ -14,9 +14,9 @@ async def fetch_stock_price(server_name: str):
 async def main():
 
     tasks = [
-        asyncio.create_task(fetch_stock_price("alpha"), name="alpha"),
-        asyncio.create_task(fetch_stock_price("beta"), name="beta"),
-        asyncio.create_task(fetch_stock_price("gamma"), name="gamma"),
+        asyncio.create_task(fetch_stock_price("Alpha"), name="alpha"),
+        asyncio.create_task(fetch_stock_price("Beta"), name="beta"),
+        asyncio.create_task(fetch_stock_price("Gamma"), name="gamma"),
     ]
 
     done, pending = await asyncio.wait(
