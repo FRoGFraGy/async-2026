@@ -26,10 +26,10 @@ async def main():
 
     winner = done.pop()
 
-    print(f"ctime(): {ctime()} Winner: {winner.result()}")
+    print(f"{ctime()} Winner: {winner.result()}")
 
     # ยกเลิก Task ที่เหลือ
-    print(f"ctime(): {ctime()} Canceled {len(pending)} pending task(s)")
+    print(f"{ctime()} Canceled {len(pending)} pending task(s)")
     for task in pending:
         task.cancel()
 
