@@ -1,33 +1,55 @@
-# นักเรียนต้องเลือกใช้ asyncio.wait() พร้อมออปชัน return_when=asyncio.FIRST_COMPLETED เท่านั้น (หากใครใช้ gather หรือ wait_for จะไม่ตรงสเปกเงื่อนไขการแข่งส่งข้อมูล)
 import asyncio
 from time import ctime
 
+# Coroutine สำหรับดึงข้อมูลราคาหุ้นจากเซิร์ฟเวอร์
 async def fetch_stock_price(server_name, delay):
-    """Simulate fetching stock price from a server with a given delay."""
-    await asyncio.sleep(delay)  # Simulate network latency
-    price = 150  # Mock price based on delay for demonstration
-    print(f"{ctime()} [{server_name}] Price: {price} USD")
-    return price
+    await asyncio.sleep(delay)  # จำลองเวลาตอบสนองของเซิร์ฟเวอร์
+    return f"[{server_name}] Price: 150 USD"
 
+# Main Coroutine
 async def main():
-    """Main function to run the stock price fetching tasks concurrently."""
+    # สร้าง Task ทั้ง 3 ตัวให้ทำงานพร้อมกัน
     tasks = [
-        asyncio.create_task(fetch_stock_price("Alpha", 3.0),name="Alpha"),
-        asyncio.create_task(fetch_stock_price("Beta", 0.8),name="Beta"),
-        asyncio.create_task(fetch_stock_price("Gamma", 1.5),name="Gamma"),
+        asyncio.create_task(
+            fetch_stock_price("Alpha", 3.0),
+            name="Alpha"
+        ),
+        asyncio.create_task(
+            fetch_stock_price("Beta", 0.8),
+            name="Beta"
+        ),
+        asyncio.create_task(
+            fetch_stock_price("Gamma", 1.5),
+            name="Gamma"
+        ),
     ]
 
-    # Wait for the first task to complete
-    done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+    print(f"{ctime()} Waiting for the fastest server...\n")
 
-    completed_task = done.pop()
+    # รอจนกว่าจะมี Task ตัวแรกเสร็จ
+    done, pending = await asyncio.wait(
+        tasks,
+        return_when=asyncio.FIRST_COMPLETED
+    )
 
-    print(f"{ctime()} Winner Result: [{completed_task.get_name()}] price: {completed_task.result()} USD")
-    
+    # ดึง Task ที่เสร็จแล้ว
+    winner = done.pop()
+
+    # แสดงผลลัพธ์ของเซิร์ฟเวอร์ที่ชนะ
+    print(f"{ctime()} Winner Result: {winner.result()}")
+
+    # ยกเลิก Task ที่ยังทำงานอยู่
     print(f"{ctime()} Canceling {len(pending)} pending task(s)...")
 
-    for ongoing_task in pending:
-        ongoing_task.cancel()
-    
+    for task in pending:
+        print(f"Cancel -> {task.get_name()}")
+        task.cancel()
+
+    # รอให้การยกเลิกเสร็จสมบูรณ์
+    await asyncio.gather(*pending, return_exceptions=True)
+
+    print(f"{ctime()} All remaining tasks have been canceled.")
+
+# เริ่มโปรแกรม
 if __name__ == "__main__":
     asyncio.run(main())
