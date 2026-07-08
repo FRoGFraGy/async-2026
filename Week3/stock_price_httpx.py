@@ -1,6 +1,6 @@
 import asyncio
 import httpx
-
+from time import ctime
 
 async def fetch_stock_price(server_name: str):
     url = f"http://127.0.0.1:8088/price/{server_name}"
@@ -26,10 +26,10 @@ async def main():
 
     winner = done.pop()
 
-    print(f"Winner: {winner.result()}")
+    print(f"ctime(): {ctime()} Winner: {winner.result()}")
 
     # ยกเลิก Task ที่เหลือ
-    print(f"Canceled {len(pending)} pending task(s)")
+    print(f"ctime(): {ctime()} Canceled {len(pending)} pending task(s)")
     for task in pending:
         task.cancel()
 
