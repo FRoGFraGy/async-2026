@@ -21,7 +21,7 @@ async def main():
     
     # 3. Print the results of all orders once they are completed.
     for dish in results:
-        print(f"{ctime()} | [Pickup] Shop: '{dish['shop']}' | '{dish['menu']}' is ready!")
+        print(f"{ctime()} | [Pickup] Shop: '{dish['shop']}' | Menu: '{dish['menu']}' is ready!")
 
 if __name__ == "__main__":
     asyncio.run(main())
