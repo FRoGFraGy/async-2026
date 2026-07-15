@@ -21,5 +21,6 @@ async def main():
     for dish in results:
         print(f"{ctime()} | [Pickup] Shop: {dish['shop']} | Menu: {dish['menu']} is ready!")
 
+    print(f"{ctime()} | Total time: {time() - start_time:.2f} seconds (Equals to the slowest dish).")
 if __name__ == "__main__":
     asyncio.run(main())
