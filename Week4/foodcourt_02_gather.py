@@ -1,8 +1,6 @@
 # foodcourt_02_gather.py
 import asyncio
-from asyncio import tasks
 from time import time, ctime
-from unittest import result
 from food_utils import send_order_to_kitchen
 
 async def main():
