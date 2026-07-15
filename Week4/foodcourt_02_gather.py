@@ -1,25 +1,27 @@
 # foodcourt_02_gather.py
 import asyncio
-from time import ctime
+from asyncio import tasks
+from time import time, ctime
+from unittest import result
 from food_utils import send_order_to_kitchen
 
 async def main():
-    MY_STUDENT_ID = "65010001"
-    print(f"{ctime()} | --- [Task 2] Practice using gather to queue multiple orders ---")
-    
+    MY_STUDENT_ID = "6710301049"
+    print(f"{ctime()} | --- [Task 2] Practice using gather to wait for all group orders ---")
+    start_time = time()
     # 1. Create a list of tasks for ordering different food items.
-    tasks = [
-        send_order_to_kitchen(MY_STUDENT_ID, "hainanese_chicken", "Chicken Rice Mixed"),
-        send_order_to_kitchen(MY_STUDENT_ID, "noodle", "noodle"),
-        send_order_to_kitchen(MY_STUDENT_ID, "steak", "steak")
-    ]
+    
+    t1 = asyncio.create_task(send_order_to_kitchen(MY_STUDENT_ID, "hainanese_chicken", "Chicken Rice"))
+    t2 = asyncio.create_task(send_order_to_kitchen(MY_STUDENT_ID, "noodle", "Wonton Noodles"))
+    t3 = asyncio.create_task(send_order_to_kitchen(MY_STUDENT_ID, "steak", "Sizzling Steak"))
+    
     
     # 2. Use asyncio.gather to run all tasks concurrently and wait for their completion.
-    results = await asyncio.gather(*tasks)
+    results = await asyncio.gather(t1,t2,t3)
     
     # 3. Print the results of all orders once they are completed.
-    for result in results:
-        print(f"{ctime()} | [{result['status']}] Shop: '{result['shop']}' | '{result['menu']}'")
+    for dish in results:
+        print(f"{ctime()} | [Pickup] Shop: '{dish['shop']}' | '{dish['menu']}' is ready!")
 
 if __name__ == "__main__":
     asyncio.run(main())
