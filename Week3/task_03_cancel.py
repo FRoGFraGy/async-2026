@@ -6,7 +6,7 @@ async def background_loop():
     try:
         print(f"{ctime()} Worker: Starting long infinite process...")
         while True:#วนตลอดเวลา
-            await asyncio.sleep(1)
+            await asyncio.sleep(5)
             print(f"{ctime()} Worker: Still ticking...")
     except asyncio.CancelledError:
         # inject when the task.cancel() is expected to be called, we can handle the cancellation gracefully
@@ -14,7 +14,7 @@ async def background_loop():
 
 async def main():
     task = asyncio.create_task(background_loop())
-    await asyncio.sleep(2.5) # let the worker run for a while
+    await asyncio.sleep(0.5) # let the worker run for a while
     
     print(f"{ctime()} Main: Changing plans, canceling the worker task now!")
     task.cancel() # cancel the task, which will raise a CancelledError in the background_loop
